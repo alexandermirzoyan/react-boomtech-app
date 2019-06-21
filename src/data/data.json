@@ -1,0 +1,26 @@
+[
+    {
+        "id": 1,
+        "name": "Alexandr",
+        "surname": "Mirzoyan",
+        "email": "alexandr.mirz12@gmail.com",
+        "address": "Saryan str",
+        "date": "2019-06-12"
+    },
+    {
+        "id": 2,
+        "name": "Poxos",
+        "surname": "Poxosyan",
+        "email": "poxos_poxosyan@mail.ru",
+        "address": "Isakov ave",
+        "date": "2019-07-28"
+    },
+    {
+        "id": 3,
+        "name": "Mark",
+        "surname": "Zuckerberg",
+        "email": "mark.zuckerberg@facebook.com",
+        "address": "Silicon Valey",
+        "date": "2019-06-30"
+    }
+]
