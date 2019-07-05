@@ -12,9 +12,11 @@ class App extends Component {
       datas: JSONData,
       sortingNames: [],
       emailErrorMessage: 'input valid email',
+      sortedCheck: false
     }
 
     this.sort = this.sort.bind(this);
+    this.updateCheckbox = this.updateCheckbox.bind(this);
   }
 
   componentDidMount() {
@@ -25,12 +27,19 @@ class App extends Component {
     });
   }
 
+  componentWillMount() {
+    let { sortedCheck } = this.state;
+    if (sortedCheck) {
+      this.sort();
+    }
+  }
+
   submit = (e) => {
     e.preventDefault(); //Stopping default browser events
     let isValid = this.validate();
 
     if (isValid) {    //if email is valid then push the information into the data
-      let { datas, sortingNames } = this.state; 
+      let { datas, sortingNames } = this.state;
       let id = 0;
       let name = this.refs.name.value;
       let surname = this.refs.surname.value;
@@ -43,12 +52,16 @@ class App extends Component {
       datas.push(data)
       sortingNames.push(data.name);
 
-    }else {
+      this.refs.myForm.reset();
+      this.refs.name.focus();
+      let { sortedCheck } = this.state;
+      if (sortedCheck) {
+        this.sort();
+      }
+    } else {
       alert(this.state.emailErrorMessage)
     }
 
-    this.refs.myForm.reset();
-    this.refs.name.focus();
   }
 
   remove = (index) => {
@@ -92,8 +105,9 @@ class App extends Component {
 
   validate = () => {
     let email = this.refs.email.value;
+    let regex = /\S+@\S+\.\S+/;
 
-    if (email.includes('@gmail.com') || email.includes('@mail.ru') || email.includes('@yahoo.com')) {
+    if (regex.test(email)) {
       this.setState({ emailErrorMessage: "valid email" })
       return true;
     }
@@ -103,7 +117,18 @@ class App extends Component {
     }
   }
 
+  updateCheckbox = () => {
+    let { sortedCheck } = this.state;
+    if (!sortedCheck) {
+      this.sort();
+    }
+    this.setState({
+      sortedCheck: !sortedCheck
+    });
+  };
+
   render() {
+    let { sortedCheck } = this.state;
     return (
       <div className="App">
         <h2>{this.state.title}</h2>
@@ -116,7 +141,12 @@ class App extends Component {
           <input type="date" ref="date" className="formField" />
           <button onClick={(e) => this.submit(e)} className="myButton"> submit </button>
         </form>
-        <button ref="mySortButton" onClick={this.sort} className="mySortButton" >Sort by name</button>
+        <form>
+          <label>
+            <input onChange={this.updateCheckbox} checked={sortedCheck} type="checkbox" />
+            <span>Sort by name</span>
+          </label>
+        </form>
         <table className="table-wrapper" >
           <tbody>
             <tr>
@@ -129,7 +159,7 @@ class App extends Component {
             </tr>
             {this.state.datas.map((data, i) =>
               <tr key={i} className="myList">
-                <td>{data.id}.</td>
+                <td>{i + 1}.</td>
                 <td>{data.name}</td>
                 <td>{data.surname}</td>
                 <td>{data.address}</td>
